@@ -1,1 +1,3 @@
-print("BHMac scaffold")
+import BHMac
+
+runBHMacApp()
