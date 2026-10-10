@@ -21,6 +21,9 @@ final class MiniTestRunner: @unchecked Sendable {
     private var assertionCount = 0
     private var testCount = 0
     private var failedTests: [String] = []
+    private var skippedTests: [String] = []
+    private var skipReasons: [String: String] = [:]
+    private var skipRequested = false
 
     func suite(_ name: String) {
         currentSuite = name
@@ -29,11 +32,19 @@ final class MiniTestRunner: @unchecked Sendable {
     func test(_ name: String, _ body: () -> Void) {
         currentTest = "\(currentSuite).\(name)"
         testCount += 1
+        skipRequested = false
         let failuresBefore = failures.count
         body()
-        if failures.count > failuresBefore {
+        if skipRequested {
+            skippedTests.append(currentTest)
+        } else if failures.count > failuresBefore {
             failedTests.append(currentTest)
         }
+    }
+
+    func skip(_ reason: String) {
+        skipRequested = true
+        skipReasons[currentTest] = reason
     }
 
     func expect(_ condition: Bool, _ message: String = "expectation failed") {
@@ -50,8 +61,12 @@ final class MiniTestRunner: @unchecked Sendable {
         for name in failedTests {
             FileHandle.standardError.write("FAILED: \(name)\n".data(using: .utf8)!)
         }
+        for name in skippedTests {
+            let reason = skipReasons[name] ?? ""
+            FileHandle.standardError.write("SKIPPED: \(name) — \(reason)\n".data(using: .utf8)!)
+        }
         let verdict = failures.isEmpty ? "PASS" : "FAIL"
-        print("MiniTest: \(testCount) tests, \(assertionCount) assertions, \(failures.count) failures -> \(verdict)")
+        print("MiniTest: \(testCount) tests (\(skippedTests.count) skipped), \(assertionCount) assertions, \(failures.count) failures -> \(verdict)")
         exit(failures.isEmpty ? 0 : 1)
     }
 }
@@ -63,6 +78,10 @@ enum MiniTest {
 
     static func test(_ name: String, _ body: () -> Void) {
         MiniTestRunner.shared.test(name, body)
+    }
+
+    static func skip(_ reason: String) {
+        MiniTestRunner.shared.skip(reason)
     }
 
     static func expect(_ condition: Bool, _ message: String = "expectation failed") {

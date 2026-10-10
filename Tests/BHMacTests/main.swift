@@ -2,4 +2,5 @@
 ThresholdsTests.run()
 BatterySnapshotTests.run()
 MenuContentFactoryTests.run()
+BatteryReaderTests.run()
 MiniTest.reportAndExit()

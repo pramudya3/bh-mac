@@ -36,14 +36,14 @@ Toolchain: Swift 6.4 at `/usr/bin/swift`; `xcode-select -p` → `/Library/Develo
 
 `ioreg -l -r -c AppleSmartBattery` works without root. Available data:
 
-**Top-level keys:**
+**Top-level keys** (on the `AppleSmartBattery` service — live charge state):
 - `MaxCapacity` (gauge %, reads 100), `CurrentCapacity` (charge %)
 - `CycleCount` = 308, `DesignCycleCount9C` = 1000 (design cycle life)
 - `Voltage` = 12025 mV, `Amperage` / `InstantAmperage` (see §7 for encoding trap)
 - `IsCharging`, `FullyCharged`, `ExternalConnected`, `TimeRemaining` (minutes), `AvgTimeToEmpty`
 - `Serial`, `DeviceName` (`bq20z451`), `MaxCapacity`
 
-**Nested `BatteryData` dictionary:**
+**Nested `BatteryData` dictionary** — **on the `AppleSmartBatteryPack` service, not on `AppleSmartBattery`** (verified via `IORegistryEntryCreateCFProperties` during Task 4; the reader reads both services and merges, pack winning):
 - `Temperature` = 3459 centi-°C → 34.59 °C (live)
 - `VirtualTemperature` = 3459 (fallback when `Temperature` absent)
 - `DesignCapacity` = 4382 mAh, `FullChargeCapacity` = 3511 mAh, `NominalChargeCapacity` = 3641 mAh, `AppleRawMaxCapacity` = 3506
@@ -75,8 +75,8 @@ Failure isolation: every IOKit call is wrapped; a failed read produces a snapsho
 
 ## 5. IOKit Reading Rules (implementation-critical)
 
-1. Match `AppleSmartBattery` via `IOServiceGetMatchingService(kIOMainPortDefault, IOServiceNameMatching("AppleSmartBattery"))`.
-2. Read properties with `IORegistryEntryCreateCFProperty` (or `IORegistryEntryCreateCFProperties` once) — both work without root on Apple Silicon.
+1. Match BOTH `AppleSmartBattery` AND `AppleSmartBatteryPack` via `IOServiceGetMatchingService(kIOMainPortDefault, IOServiceNameMatching(...))` (return value is `io_service_t` — compare against `0` for "not found", it is NOT Optional). Live charge state (IsCharging, CurrentCapacity, CycleCount, DesignCycleCount9C, Voltage, InstantAmperage/Amperage, TimeRemaining, AvgTimeToEmpty) lives on `AppleSmartBattery`; the rich pack data (Temperature, VirtualTemperature, DesignCapacity, FullChargeCapacity, LifetimeData) lives in `AppleSmartBatteryPack`'s `BatteryData` dictionary — merge pack over service before parsing.
+2. Read properties with `IORegistryEntryCreateCFProperties(entry, &properties, kCFAllocatorDefault, 0)` (4 arguments in this SDK) — works without root on Apple Silicon.
 3. `Temperature` must be read from the nested `BatteryData` dictionary, NOT top level (it does not exist at top level on this machine — this is the #1 trap).
 4. Temperature units: **centi-degrees C** (3459 → 34.59 °C). Voltage: **mV** (12025 → 12.03 V).
 5. Amperage trap: `Amperage` / `InstantAmperage` come back as huge unsigned values (e.g. 18446744073709551357) that are two's-complement `Int64`. Cast to `Int64` — negative = discharging, positive = charging. Do not `UInt64`-interpret or `abs()`. On this machine the value decodes to −259, in **mA**. Display amps with two decimals (e.g. `-0.26 A`). Prefer `InstantAmperage`, fallback `Amperage`.
