@@ -85,10 +85,15 @@ enum MenuContentFactory {
 
     private static func chargeLine(_ s: BatterySnapshot) -> String {
         guard let percent = s.chargePercent else { return "N/A" }
-        if s.isCharging == true {
+        switch s.isCharging {
+        case .some(true):
             return "\(percent)% · Charging"
+        case .some(false):
+            return "\(percent)% · Discharging · \(formatTime(minutes: s.timeRemainingMinutes)) left"
+        case .none:
+            // Registry didn't say — don't claim a state we don't know.
+            return "\(percent)% · Unknown"
         }
-        return "\(percent)% · Discharging · \(formatTime(minutes: s.timeRemainingMinutes)) left"
     }
 
     private static func powerLine(_ s: BatterySnapshot) -> String {

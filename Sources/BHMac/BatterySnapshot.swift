@@ -5,8 +5,10 @@ import Foundation
 /// seam lives in `IOKitBatteryReader` and hands this a real dictionary.
 ///
 /// Units, per spec §5:
-/// - `temperatureC` / `virtualTemperatureC` / `lifetime*TempC`: degrees Celsius
-///   (registry stores centi-degrees; we divide by 100 at parse time)
+/// - `temperatureC` / `virtualTemperatureC`: degrees Celsius (registry stores
+///   centi-degrees; we divide by 100 at parse time)
+/// - `lifetime*TempC`: degrees Celsius from `LifetimeData`, which uses
+///   deci-degrees (divide by 10)
 /// - `voltageV`: volts (registry millivolts)
 /// - `currentA`: amps, negative = discharging (registry milliamps stored as
 ///   two's-complement 64-bit — see the amperage decode below)

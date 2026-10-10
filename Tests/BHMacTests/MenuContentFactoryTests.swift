@@ -91,6 +91,16 @@ enum MenuContentFactoryTests {
             expectEqual(MenuContentFactory.formatTemperature(34.59), "34.6 °C")
         }
 
+        MiniTest.test("testChargingStateUnknownRow") {
+            var dict = realMachineFixture()
+            dict.removeValue(forKey: "IsCharging")
+            let unknown = BatterySnapshot.parse(from: dict)
+            expectEqual(
+                MenuContentFactory.makeRows(from: unknown)[4],
+                .info("Charge — 81% · Unknown")
+            )
+        }
+
         MiniTest.test("testChargingRowOmitsTimeLeft") {
             var dict = realMachineFixture()
             dict["IsCharging"] = true
