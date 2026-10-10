@@ -47,7 +47,7 @@ Toolchain: Swift 6.4 at `/usr/bin/swift`; `xcode-select -p` → `/Library/Develo
 - `Temperature` = 3459 centi-°C → 34.59 °C (live)
 - `VirtualTemperature` = 3459 (fallback when `Temperature` absent)
 - `DesignCapacity` = 4382 mAh, `FullChargeCapacity` = 3511 mAh, `NominalChargeCapacity` = 3641 mAh, `AppleRawMaxCapacity` = 3506
-- `LifetimeData`: `AverageTemperature` = 273 (27.3 °C), `MaximumTemperature` = 461 (46.1 °C), `MinimumTemperature` = 58 (0.6 °C), `TemperatureSamples` = 533108, `TotalOperatingTime` = 33319
+- `LifetimeData`: `AverageTemperature` = 273 (27.3 °C), `MaximumTemperature` = 461 (46.1 °C), `MinimumTemperature` = 58 (5.8 °C), `TemperatureSamples` = 533108, `TotalOperatingTime` = 33319. **Units: deci-degrees (°0.1 °C), unlike the live `Temperature` key which is centi-degrees.** Sibling `LifetimeData` fields keep their own scales (`MaximumChargeCurrent` = 2405 mA, `MaximumPackVoltage` = 13037 → centi-V 13.04 V).
 
 Note: `system_profiler SPPowerDataType` reports Maximum Capacity 84% / Condition Normal — computed differently from `FullChargeCapacity/DesignCapacity` (80.1%). We use the IOKit ratio and our own condition label (§6) as the single source.
 
@@ -116,7 +116,7 @@ Constants in `Thresholds.swift` so they can be tuned without touching logic.
 4. `Capacity — 3511 / 4382 mAh (80%)`
 5. `Charge — 81% · Discharging · ~9h 37m left` (or `· Charging`; time = `TimeRemaining`, fallback `AvgTimeToEmpty`)
 6. `Power — 12.0 V · -0.26 A`
-7. `Lifetime (recorded) — Avg 27.3°C · Max 46.1°C · Min 0.6°C`
+7. `Lifetime (recorded) — Avg 27.3°C · Max 46.1°C · Min 5.8°C` (deci-°C source, see §3)
 8. separator
 9. `Refresh` (enabled action — immediate re-read)
 10. separator

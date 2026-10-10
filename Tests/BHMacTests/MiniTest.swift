@@ -80,3 +80,14 @@ func expectEqual<T: Equatable>(_ actual: T?, _ expected: T?, _ line: UInt = #lin
         "line \(line): expected \(String(describing: expected)), got \(String(describing: actual))"
     )
 }
+
+func expectClose(_ actual: Double?, _ expected: Double, accuracy: Double, _ line: UInt = #line) {
+    guard let actual else {
+        MiniTest.expect(false, "line \(line): expected \(expected)±\(accuracy), got nil")
+        return
+    }
+    MiniTest.expect(
+        abs(actual - expected) <= accuracy,
+        "line \(line): expected \(expected)±\(accuracy), got \(actual)"
+    )
+}
