@@ -20,11 +20,10 @@ Path: **Architectural** (new project, empty repo)
 
 ## Checklist
 - [x] 1. Explore project context — repo kosong, proyek baru
-- [x] 2. Clarifying questions (stack, Mac, data source, scope, distribusi)
-- [ ] 2b. Sisa pertanyaan: bahasa UI, interval polling
-- [ ] 3. Propose 2-3 approaches with trade-offs
-- [ ] 4. Present design in sections, approval per section
-- [ ] 5. Write design doc → `docs/superpowers/specs/2026-10-10-battery-health-menu-bar-design.md`
-- [ ] 6. Spec self-review
-- [ ] 7. User reviews written spec
+- [x] 2. Clarifying questions (stack, Mac, data source, scope, distribusi, bahasa UI)
+- [x] 3. Approaches presented — user chose **A — Lean**
+- [x] 4. Design approved (2 sections)
+- [x] 5. Design doc written → `docs/superpowers/specs/2026-10-10-battery-health-menu-bar-design.md`
+- [x] 6. Spec self-review (fixes committed)
+- [ ] 7. User reviews written spec ← MENUNGGU APPROVAL
 - [ ] 8. Invoke writing-plans skill

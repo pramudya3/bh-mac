@@ -60,10 +60,10 @@ BHMac/
   AppDelegate.swift            — app lifecycle: creates status item, starts timer
   MenuBarController.swift      — thin NSStatusBar/NSMenu layer (AppKit only)
   MenuContentFactory.swift     — PURE: BatterySnapshot → [MenuRow] description
+  MenuRow.swift                — display model (enum: item(title, style) / separator)
   BatteryReader.swift          — thin IOKit seam: reads registry, calls parser
   BatterySnapshot.swift        — struct + PURE parser (dictionary → struct)
   Thresholds.swift             — constants: poll interval, temp tiers, health bands
-  MenuRow.swift                — display model (enum: item(title, style) / separator)
 scripts/make-app.sh            — assembles BHMac.app bundle from release binary
 Tests/BHMacTests/
   ...                          — XCTest, pure modules fully covered (§9)
@@ -79,9 +79,10 @@ Failure isolation: every IOKit call is wrapped; a failed read produces a snapsho
 2. Read properties with `IORegistryEntryCreateCFProperty` (or `IORegistryEntryCreateCFProperties` once) — both work without root on Apple Silicon.
 3. `Temperature` must be read from the nested `BatteryData` dictionary, NOT top level (it does not exist at top level on this machine — this is the #1 trap).
 4. Temperature units: **centi-degrees C** (3459 → 34.59 °C). Voltage: **mV** (12025 → 12.03 V).
-5. Amperage trap: `Amperage` / `InstantAmperage` come back as huge unsigned values (e.g. 18446744073709551357) that are two's-complement `Int64`. Cast to `Int64` — negative = discharging, positive = charging. Do not `UInt64`-interpret or `abs()`.
-6. `TimeRemaining` is minutes; `AvgTimeToEmpty` is a better estimate while discharging. Treat 65535 (`AvgTimeToFull` on AC) as "calculating/n/a".
-7. Never assume any key exists. Every field is parsed defensively into an `Optional`.
+5. Amperage trap: `Amperage` / `InstantAmperage` come back as huge unsigned values (e.g. 18446744073709551357) that are two's-complement `Int64`. Cast to `Int64` — negative = discharging, positive = charging. Do not `UInt64`-interpret or `abs()`. On this machine the value decodes to −259, in **mA**. Display amps with two decimals (e.g. `-0.26 A`). Prefer `InstantAmperage`, fallback `Amperage`.
+6. `TimeRemaining` is minutes; use it for the "time left" display, with `AvgTimeToEmpty` as fallback. Treat 65535 (`AvgTimeToFull` on AC) as "calculating/n/a".
+7. Health is computed ONLY from the mAh pair: `FullChargeCapacity / DesignCapacity` from the nested `BatteryData` dictionary. Do NOT use the top-level `MaxCapacity` key — it is a smoothed gauge value that reads 100 even on a worn battery.
+8. Never assume any key exists. Every field is parsed defensively into an `Optional`.
 
 ## 6. Display Specification
 
@@ -113,8 +114,8 @@ Constants in `Thresholds.swift` so they can be tuned without touching logic.
 2. `Temperature — 34.6 °C`
 3. `Cycles — 308 of 1000 (31% used)`
 4. `Capacity — 3511 / 4382 mAh (80%)`
-5. `Charge — 81% · Discharging · ~9h 37m left` (or `· Charging`)
-6. `Power — 12.0 V · -1.26 A`
+5. `Charge — 81% · Discharging · ~9h 37m left` (or `· Charging`; time = `TimeRemaining`, fallback `AvgTimeToEmpty`)
+6. `Power — 12.0 V · -0.26 A`
 7. `Lifetime (recorded) — Avg 27.3°C · Max 46.1°C · Min 0.6°C`
 8. separator
 9. `Refresh` (enabled action — immediate re-read)
@@ -146,7 +147,7 @@ Rows 1–7 are disabled info rows. Every numeric row falls back to `N/A` individ
 
 `swift test` with XCTest, all pure:
 
-1. **Parser** — fixture dictionary captured from the real `ioreg` output above → snapshot equals expected values (34.59 °C, 308 cycles, 4382 mAh design, 3511 full charge, 12.025 V, Int64 amperage -1259 mA, etc.).
+1. **Parser** — fixture dictionary captured from the real `ioreg` output above → snapshot equals expected values (34.59 °C, 308 cycles, 4382 mAh design, 3511 full charge, 12.025 V, `InstantAmperage` 18446744073709551357 → Int64 −259, etc.).
 2. **Amperage encoding** — unsigned wraparound value → negative Int64.
 3. **Temperature fallback** — missing `Temperature` → uses `VirtualTemperature`; both missing → nil.
 4. **Thresholds** — boundary values 35.0 and 42.0 map to expected tiers.
