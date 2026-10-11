@@ -1,10 +1,17 @@
 import AppKit
 
 /// Status-bar title colors per tier, and the health band colors, per spec §6.
+/// The menu-bar item itself takes no tier color (see `statusItemColor`).
 /// Pure mappings — semantic system colors only, so they follow Dark Mode and
 /// increased contrast without a hand-tuned hex anywhere — so they can be
 /// tested without rendering anything.
 enum StatusStyle {
+    /// The status item's single color, for every tier including muted. The
+    /// menu bar is glanced at dozens of times a day — the traffic light lives
+    /// one click deep in the dropdown instead; the alarm never rides on the
+    /// menu bar's color at a glance.
+    static let statusItemColor = NSColor.labelColor
+
     static func color(for tier: TempTier) -> NSColor {
         switch tier {
         case .muted:
@@ -31,17 +38,17 @@ enum StatusStyle {
         }
     }
 
-    /// The status item's glyph, baked in its tier's color so the symbol and
-    /// the number read as one object rather than a system icon next to a
-    /// colored string. Non-template: the accent has to survive.
-    static func statusSymbol(named name: String, tier: TempTier, pointSize: CGFloat) -> NSImage? {
+    /// The status item's glyph, baked in the neutral status color so the
+    /// symbol and the reading read as one object. Non-template: the color
+    /// has to survive.
+    static func statusSymbol(named name: String, pointSize: CGFloat) -> NSImage? {
         guard let symbol = NSImage(systemSymbolName: name, accessibilityDescription: nil)?
             .withSymbolConfiguration(.init(pointSize: pointSize, weight: .medium))
         else { return nil }
         let tinted = NSImage(size: symbol.size, flipped: false) { rect in
             symbol.draw(in: rect)
             NSGraphicsContext.current?.compositingOperation = .sourceAtop
-            color(for: tier).set()
+            statusItemColor.set()
             NSBezierPath(rect: rect).fill()
             return true
         }

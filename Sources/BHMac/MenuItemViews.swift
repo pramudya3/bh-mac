@@ -28,7 +28,9 @@ enum MenuMetrics {
     /// item itself. One measurement voice across all three.
     static func measurementFont() -> NSFont { NSFont.monospacedSystemFont(ofSize: 11, weight: .medium) }
     static func tickFont() -> NSFont { NSFont.monospacedSystemFont(ofSize: 8.5, weight: .regular) }
-    static func titleFont() -> NSFont { NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .regular) }
+    /// The status item reads at 11pt — small enough to be quiet next to the
+    /// system icons, still tabular so a digit change never reflows it.
+    static func titleFont() -> NSFont { NSFont.monospacedDigitSystemFont(ofSize: 11, weight: .regular) }
 
     static let sectionTracking: CGFloat = 0.6
 }

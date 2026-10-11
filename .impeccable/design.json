@@ -134,7 +134,7 @@
       "refersTo": "status-item",
       "description": "The live battery temperature in the menu bar: tier-tinted thermometer glyph plus the reading in tabular digits.",
       "html": "<div class=\"ds-status-item\"><span class=\"ds-status-item__glyph\"></span><span class=\"ds-status-item__reading\">34.6&deg;C</span></div>",
-      "css": ".ds-status-item { display: flex; align-items: center; gap: 3pt; height: 22pt; font: 13pt/22pt -apple-system, 'SF Pro Text', sans-serif; font-variant-numeric: tabular-nums; color: #34C759; background: transparent; border: none; } .ds-status-item__glyph { width: 10pt; height: 13pt; background: currentColor; border-radius: 2pt; flex: 0 0 auto; } .ds-status-item__reading { background: transparent; border: none; }"
+      "css": ".ds-status-item { display: flex; align-items: center; gap: 3pt; height: 22pt; font: 11pt/22pt -apple-system, 'SF Pro Text', sans-serif; font-variant-numeric: tabular-nums; color: #000000; background: transparent; border: none; } .ds-status-item__glyph { width: 8pt; height: 11pt; background: currentColor; border-radius: 2pt; flex: 0 0 auto; } .ds-status-item__reading { background: transparent; border: none; }"
     },
     {
       "name": "Metric Row",
@@ -190,7 +190,7 @@
     "overview": "BHMac is a measurement instrument that happens to live in a menu bar. One voice for numbers, one voice for words, one accent for state, and nothing that is not a measurement. It refuses the menu-bar-utility genre default \u2014 icon packs and unaligned 'Label \u2014 value' lists \u2014 as hard as it refuses the neon telemetry dashboard opposite. A battery instrument should read correctly at a glance across a desk.",
     "keyCharacteristics": [
       "Two type voices, never mixed: SF Pro speaks words, SF Mono speaks numbers.",
-      "One accent, spent in exactly four places: status item, live temperature, thermal scale, health band word.",
+      "One accent, spent in exactly three places: live temperature, thermal scale, health band word. The status item stays neutral.",
       "The material is the menu's own: no background, no border, no card, no shadow is drawn.",
       "Fixed geometry: 288pt register, one 104pt label column, readings sharing one right edge."
     ],

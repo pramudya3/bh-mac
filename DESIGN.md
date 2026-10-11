@@ -48,7 +48,7 @@ spacing:
   message-row: "22pt"
 components:
   status-item:
-    textColor: "{colors.tier-normal}"
+    textColor: "{colors.label}"
     typography: "{typography.display}"
     height: "22pt"
   metric-row:
@@ -79,11 +79,11 @@ BHMac is a measurement instrument that happens to live in a menu bar. It reads o
 
 The instinct this world refuses is the genre default of a menu-bar utility: an icon pack, a colored battery glyph, and a text list of `Label — value` strings with no alignment, no hierarchy, and a decorative sparkline. Its opposite — the neon telemetry dashboard with glowing gauges and gratuitous data — is equally refused. A battery instrument should look like something you would trust to read correctly at a glance across a desk.
 
-The status item carries the reading in tabular figures so a changing digit never reflows the menu bar, and a thermometer glyph in the tier's color because a bare number in a crowded menu bar is hard to find. The dropdown is a register: a fixed left column of names, a right-aligned column of readings on one shared edge, and one authored graphic — the thermal scale that places the live temperature against the two thresholds the app itself declares.
+The status item carries the reading in tabular figures so a changing digit never reflows the menu bar, and a thermometer glyph in the neutral label color, tinted to match so symbol and reading read as one object. The dropdown is a register: a fixed left column of names, a right-aligned column of readings on one shared edge, and one authored graphic — the thermal scale that places the live temperature against the two thresholds the app itself declares.
 
 **Key Characteristics:**
 - Two type voices, never mixed: the system face says words, the measurement face says numbers.
-- One accent, spent only where state is reported: the status item, the live temperature, the thermal scale, and the health band word.
+- One accent, spent only where state is reported: the live temperature, the thermal scale, and the health band word. The status item takes no accent — it is read dozens of times a day and stays neutral; the alarm lives one click deep.
 - The material is the menu's own: no background, no border, no card, no shadow is drawn.
 - Fixed geometry. The register is 288pt wide with one label column, and every reading lands on the same right edge.
 
@@ -92,18 +92,18 @@ The status item carries the reading in tabular figures so a changing digit never
 The palette is Apple's semantic system colors, referenced by name in the code so Dark Mode and Increased Contrast resolve without hand-tuning. The hex values in the frontmatter are the light-appearance approximation, for tooling only.
 
 ### Primary
-- **Normal** (`NSColor.systemGreen`): the Normal temperature tier (≤ 35 °C) and the Normal health band (≥ 80%). Appears in the status item, on the live temperature value, on the thermal scale's lit band, and on the health band word.
+- **Normal** (`NSColor.systemGreen`): the Normal temperature tier (≤ 35 °C) and the Normal health band (≥ 80%). Appears on the live temperature value, on the thermal scale's lit band, and on the health band word.
 - **Warm** (`NSColor.systemOrange`): the Warm tier (35–42 °C) and the Replace Soon band (60–79%). Same four placements.
 - **Hot** (`NSColor.systemRed`): the Hot tier (> 42 °C) and the Service band (< 60%). Same four placements.
 
 ### Neutral
-- **Label** (`NSColor.labelColor`): measured values, action titles, and the thermal scale's needle. The one neutral that carries data.
+- **Label** (`NSColor.labelColor`): measured values, action titles, the thermal scale's needle, and the whole status item (glyph and reading).
 - **Secondary Label** (`NSColor.secondaryLabelColor`): row labels, section heads, state words that carry no alarm, unavailable readings (`N/A`), and the scale's ticks — anything that names rather than reports.
 - **Separator** (`NSColor.separatorColor`): the thermal scale's unfilled track and the menu's own section rules.
 
 ### Named Rules
 
-**The One Accent Rule.** The tier palette is the only color in the product, and it is used in exactly four places: the status item, the live temperature value, the thermal scale, and the health band word. Everything else is a system neutral. A fifth use is a defect.
+**The One Accent Rule.** The tier palette is the only color in the product, and it is used in exactly three places: the live temperature value, the thermal scale, and the health band word. Everything else is a system neutral. A fourth use is a defect.
 
 **The Never-Color-Only Rule.** Color is never the sole carrier of a state. Every tier is also written as a word (Normal / Warm / Hot on the status item's accessibility value; the health band word in the register), and the thermal scale states its thresholds as tick labels. The color is the alarm; the text is the message.
 
@@ -116,7 +116,7 @@ The palette is Apple's semantic system colors, referenced by name in the code so
 **Character:** A humanist sans for language, a monospace for data. The pairing is deliberately not decorative: the monospace exists so columns align and digits hold still, and it is used for measurements, tick labels, and readings — never as a costume for "technical" on words.
 
 ### Hierarchy
-- **Display** (regular, 13pt, tabular digits): the status item's reading. The only type in the product sized for a glance across a desk.
+- **Display** (regular, 11pt, tabular digits): the status item's reading. The only type in the product sized for a glance across a desk.
 - **Measurement** (medium, 11pt, SF Mono): every value in the register, from `80%` to `12.0 V · -0.26 A`.
 - **Body** (regular, 11pt): row labels and state words. The wayfinding layer.
 - **Section Head** (medium, 10pt, +0.06em tracking, uppercase): `CONDITION`, `RIGHT NOW`, `LIFETIME (RECORDED)`. Quiet, and set against the group it names rather than floating between groups.

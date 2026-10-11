@@ -6,6 +6,13 @@ enum StatusStyleTests {
     static func run() {
         MiniTest.suite("StatusStyleTests")
 
+        MiniTest.test("testStatusItemColorIsNeutral") {
+            // The menu bar is glanced at constantly; the alarm lives one
+            // click deep in the dropdown. Neutral for every tier, no
+            // exceptions, including muted.
+            expectEqual(StatusStyle.statusItemColor, NSColor.labelColor)
+        }
+
         MiniTest.test("testTierColors") {
             expectEqual(StatusStyle.color(for: TempTier.muted), NSColor.secondaryLabelColor)
             expectEqual(StatusStyle.color(for: TempTier.normal), NSColor.systemGreen)
@@ -21,10 +28,10 @@ enum StatusStyleTests {
 
         MiniTest.test("testStatusSymbolResolvesAndBailsOnGarbage") {
             MiniTest.expect(
-                StatusStyle.statusSymbol(named: MenuContentFactory.statusSymbolName, tier: .normal, pointSize: 13) != nil,
+                StatusStyle.statusSymbol(named: MenuContentFactory.statusSymbolName, pointSize: 11) != nil,
                 "the status item's glyph must resolve"
             )
-            expectEqual(StatusStyle.statusSymbol(named: "", tier: .normal, pointSize: 13), nil)
+            expectEqual(StatusStyle.statusSymbol(named: "", pointSize: 11), nil)
         }
 
         MiniTest.test("testMeasurementVoiceIsFixedPitch") {

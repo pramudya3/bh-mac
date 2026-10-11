@@ -23,19 +23,20 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         statusItem.button?.setAccessibilityLabel("Battery Health")
     }
 
-    /// The status item: a glyph in the live tier's color plus the reading in
-    /// tabular figures, so a digit change never reflows the menu bar.
+    /// The status item: one neutral glyph plus the reading in tabular
+    /// figures, so a digit change never reflows the menu bar. The tier color
+    /// is not spent here — it lives in the dropdown (spec §6).
     func updateTitle(_ title: MenuContentFactory.StatusTitle) {
         statusItem.button?.attributedTitle = NSAttributedString(
             string: title.text,
             attributes: [
-                .foregroundColor: StatusStyle.color(for: title.tier),
+                .foregroundColor: StatusStyle.statusItemColor,
                 .font: MenuMetrics.titleFont(),
             ]
         )
         if let symbolName = title.symbolName {
             statusItem.button?.image = StatusStyle.statusSymbol(
-                named: symbolName, tier: title.tier, pointSize: 13
+                named: symbolName, pointSize: 11
             )
             statusItem.button?.imagePosition = .imageLeading
         } else {

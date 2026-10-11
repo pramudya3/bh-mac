@@ -87,9 +87,10 @@ Failure isolation: every IOKit call is wrapped; a failed read produces a snapsho
 ## 6. Display Specification
 
 ### Menu bar title
-- Format: `34.6°C` (one decimal). Color tier from thresholds below.
-- No battery detected → `No Battery`, `.secondaryLabelColor`.
-- Temperature unavailable → `—` with the color of whatever fallback data exists (charge %) or neutral.
+- Format: `34.6°C` (one decimal), monospaced tabular digits at 11pt.
+- **Color: always `.labelColor` (neutral), every tier, including muted.** The tier alarm is spent only in the dropdown (thermal scale, live temperature value, health band); the menu bar stays quiet because it is glanced at dozens of times a day. A neutral title still announces its tier via VoiceOver (see §6 accessibility).
+- No battery detected → `No Battery`, `.labelColor`.
+- Temperature unavailable → `—`, `.labelColor`.
 
 ### Temperature tiers (thresholds, advisory)
 | Tier | Range | Color | Rationale |
