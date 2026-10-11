@@ -5,6 +5,29 @@ A menu-bar-only macOS app that shows **battery temperature** at a glance, with b
 - **Menu bar:** live battery temperature, color-coded (green ≤ 35 °C, orange ≤ 42 °C, red above)
 - **Dropdown:** health %, cycles vs. design life, capacities, charge/power, and lifetime stats recorded by the battery's own gas gauge
 
+## What the interface looks like
+
+The menu bar carries a thermometer glyph and the live reading in tabular figures,
+so a changing digit never reflows it. The glyph disappears when there is no
+reading to back it up (`No Battery`, `—`).
+
+The dropdown is a fixed register, not a text list:
+
+| Section | Rows |
+|---|---|
+| **Condition** | Battery Health (percent + band word, colored), Temperature (value + the thermal scale beneath it), Cycles, Capacity |
+| **Right now** | Charge (percent + state), Time left (on battery only), Power (voltage · amperage) |
+| **Lifetime (recorded)** | Average, Maximum, Minimum temperature |
+
+Values sit in the monospaced measurement face, labels in the system face, and
+every reading lines up on one right edge. Missing registers render `N/A`.
+Between `Refresh` (⌘R) and `Quit` (⌘Q) the register data never mixes with an action.
+
+The thermal scale under the temperature row is the one authored graphic: a
+hairline ruler over 20–50 °C with the live tier's band lit, tick labels at the
+app's own 35 °C and 42 °C thresholds, and a needle at the reading that slides in
+as the menu opens. Full design system in [DESIGN.md](DESIGN.md).
+
 ## Requirements
 
 - macOS 13.0+ (developed and data-verified on Apple Silicon)

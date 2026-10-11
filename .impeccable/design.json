@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-11T00:00:00Z",
+  "title": "Design System: BHMac \u2014 Battery Health Menu Bar",
+  "extensions": {
+    "colorMeta": {
+      "label": {
+        "role": "neutral",
+        "displayName": "Label",
+        "canonical": "NSColor.labelColor",
+        "tonalRamp": [
+          "#000000",
+          "#3D3D3D",
+          "#7F7F7F",
+          "#B0B0B0",
+          "#E0E0E0",
+          "#F5F5F5",
+          "#FAFAFA",
+          "#FFFFFF"
+        ]
+      },
+      "secondary-label": {
+        "role": "neutral",
+        "displayName": "Secondary Label",
+        "canonical": "NSColor.secondaryLabelColor",
+        "tonalRamp": [
+          "#1A1A1A",
+          "#3A3A3A",
+          "#5C5C5C",
+          "#7F7F7F",
+          "#A3A3A3",
+          "#C7C7C7",
+          "#EBEBEB",
+          "#FCFCFC"
+        ]
+      },
+      "separator": {
+        "role": "neutral",
+        "displayName": "Separator",
+        "canonical": "NSColor.separatorColor",
+        "tonalRamp": [
+          "#0A0A0A",
+          "#1C1C1C",
+          "#2E2E2E",
+          "#3F3F3F",
+          "#6B6B6B",
+          "#979797",
+          "#C3C3C3",
+          "#E8E8EA"
+        ]
+      },
+      "tier-normal": {
+        "role": "primary",
+        "displayName": "Normal",
+        "canonical": "NSColor.systemGreen",
+        "tonalRamp": [
+          "#0B3D17",
+          "#10641F",
+          "#1B8B33",
+          "#34C759",
+          "#54D173",
+          "#7FDD97",
+          "#A9E9BB",
+          "#D4F4DD"
+        ]
+      },
+      "tier-warm": {
+        "role": "secondary",
+        "displayName": "Warm",
+        "canonical": "NSColor.systemOrange",
+        "tonalRamp": [
+          "#3D2400",
+          "#643B00",
+          "#A85F00",
+          "#FF9500",
+          "#FFAB33",
+          "#FFC266",
+          "#FFD899",
+          "#FFEBCC"
+        ]
+      },
+      "tier-hot": {
+        "role": "tertiary",
+        "displayName": "Hot",
+        "canonical": "NSColor.systemRed",
+        "tonalRamp": [
+          "#3D0C07",
+          "#64140F",
+          "#A81F17",
+          "#FF3B30",
+          "#FF6154",
+          "#FF8577",
+          "#FFAA9F",
+          "#FFCFC8"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Reading",
+        "purpose": "The status item's live temperature, in tabular digits."
+      },
+      "body": {
+        "displayName": "Word",
+        "purpose": "Row labels and state words."
+      },
+      "measurement": {
+        "displayName": "Measurement",
+        "purpose": "Every number in the register, plus the scale ticks."
+      },
+      "section-head": {
+        "displayName": "Section Head",
+        "purpose": "The three register sections, uppercase and tracked."
+      },
+      "scale-tick": {
+        "displayName": "Scale Tick",
+        "purpose": "The 35\u00b0 and 42\u00b0 threshold labels under the ruler."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "needle-settle",
+        "value": "NSAnimationContext, 0.24s, CAMediaTimingFunction(easeOut)",
+        "purpose": "The thermal scale's needle slides in from the left edge once per menu open. Disabled when the system's Reduce Motion is on."
+      }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "Status Item",
+      "kind": "custom",
+      "refersTo": "status-item",
+      "description": "The live battery temperature in the menu bar: tier-tinted thermometer glyph plus the reading in tabular digits.",
+      "html": "<div class=\"ds-status-item\"><span class=\"ds-status-item__glyph\"></span><span class=\"ds-status-item__reading\">34.6&deg;C</span></div>",
+      "css": ".ds-status-item { display: flex; align-items: center; gap: 3pt; height: 22pt; font: 13pt/22pt -apple-system, 'SF Pro Text', sans-serif; font-variant-numeric: tabular-nums; color: #34C759; background: transparent; border: none; } .ds-status-item__glyph { width: 10pt; height: 13pt; background: currentColor; border-radius: 2pt; flex: 0 0 auto; } .ds-status-item__reading { background: transparent; border: none; }"
+    },
+    {
+      "name": "Metric Row",
+      "kind": "custom",
+      "refersTo": "metric-row",
+      "description": "One measurement register: named label on the left column, reading right-aligned to the shared edge.",
+      "html": "<div class=\"ds-metric-row\"><span class=\"ds-metric-row__label\">Battery Health</span><span class=\"ds-metric-row__value\">80%</span></div>",
+      "css": ".ds-metric-row { display: grid; grid-template-columns: 104pt 1fr; align-items: center; width: 288pt; height: 24pt; padding: 0 12pt; background: transparent; border: none; } .ds-metric-row__label { font: 11pt -apple-system, 'SF Pro Text', sans-serif; color: #7F7F7F; } .ds-metric-row__value { font: 600 11pt 'SF Mono', Menlo, monospace; color: #000000; text-align: right; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Metric Row \u2014 State Word",
+      "kind": "custom",
+      "refersTo": "metric-row",
+      "description": "A reading carrying a state word, set in the human face and colored when the state is an alarm.",
+      "html": "<div class=\"ds-metric-row\"><span class=\"ds-metric-row__label\">Battery Health</span><span class=\"ds-metric-row__value\"><span class=\"ds-metric-row__num\">80%</span><span class=\"ds-metric-row__note\">Normal</span></span></div>",
+      "css": ".ds-metric-row__num { font: 600 11pt 'SF Mono', Menlo, monospace; color: #000000; font-variant-numeric: tabular-nums; } .ds-metric-row__note { font: 11pt -apple-system, 'SF Pro Text', sans-serif; color: #34C759; margin-left: 0.35em; }"
+    },
+    {
+      "name": "Section Head",
+      "kind": "custom",
+      "refersTo": "section-head",
+      "description": "Uppercase, tracked head that opens a register group, with more air above than below.",
+      "html": "<div class=\"ds-section-head\">CONDITION</div>",
+      "css": ".ds-section-head { width: 288pt; height: 26pt; padding: 0 12pt 0; display: flex; align-items: flex-end; padding-bottom: 5pt; font: 500 10pt -apple-system, 'SF Pro Text', sans-serif; letter-spacing: 0.06em; text-transform: uppercase; color: #7F7F7F; background: transparent; }"
+    },
+    {
+      "name": "Thermal Scale",
+      "kind": "custom",
+      "refersTo": "thermal-scale",
+      "description": "The signature graphic: hairline ruler over a 20\u201350 \u00b0C domain, the live tier's band lit, threshold ticks labelled, needle at the reading.",
+      "html": "<div class=\"ds-scale\"><div class=\"ds-scale__track\"><div class=\"ds-scale__band\"></div><div class=\"ds-scale__tick\" data-t=\"35\"></div><div class=\"ds-scale__tick\" data-t=\"42\"></div><div class=\"ds-scale__needle\"></div></div><div class=\"ds-scale__labels\"><span>35&deg;</span><span>42&deg;</span></div></div>",
+      "css": ".ds-scale { width: 288pt; height: 30pt; background: transparent; } .ds-scale__track { position: relative; height: 2.5pt; margin: 8.75pt 12pt 0; background: #E8E8EA; border-radius: 1.25pt; } .ds-scale__band { position: absolute; inset: 0 auto 0 0; width: 50%; background: #34C759; border-radius: 1.25pt; } .ds-scale__tick { position: absolute; top: -1.75pt; width: 1.5pt; height: 6pt; background: #7F7F7F; } .ds-scale__tick[data-t='35'] { left: 50%; } .ds-scale__tick[data-t='42'] { left: 73.3%; } .ds-scale__needle { position: absolute; top: -4.25pt; left: 48.7%; width: 2.5pt; height: 11pt; background: #000000; border-radius: 1.25pt; transition: left 0.24s cubic-bezier(0.3, 0.15, 0.15, 1); } .ds-scale__labels { display: flex; justify-content: space-between; margin: 4pt 12pt 0; font: 8.5pt 'SF Mono', Menlo, monospace; color: #7F7F7F; } @media (prefers-reduced-motion: reduce) { .ds-scale__needle { transition: none; } }"
+    },
+    {
+      "name": "Separator",
+      "kind": "custom",
+      "refersTo": "separator-row",
+      "description": "The menu's own hairline rule between register sections, set the width of the content.",
+      "html": "<div class=\"ds-separator\"></div>",
+      "css": ".ds-separator { width: 288pt; height: 13pt; display: flex; align-items: center; background: transparent; } .ds-separator::after { content: ''; display: block; width: 100%; margin: 0 12pt; height: 0.5pt; background: #E8E8EA; }"
+    },
+    {
+      "name": "Message Row",
+      "kind": "custom",
+      "refersTo": "message-row",
+      "description": "The no-battery case: one plain line, no register, no icon.",
+      "html": "<div class=\"ds-message-row\">No battery detected</div>",
+      "css": ".ds-message-row { width: 288pt; height: 22pt; display: flex; align-items: center; padding: 0 12pt; font: 11pt -apple-system, 'SF Pro Text', sans-serif; color: #7F7F7F; background: transparent; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Bench Instrument",
+    "overview": "BHMac is a measurement instrument that happens to live in a menu bar. One voice for numbers, one voice for words, one accent for state, and nothing that is not a measurement. It refuses the menu-bar-utility genre default \u2014 icon packs and unaligned 'Label \u2014 value' lists \u2014 as hard as it refuses the neon telemetry dashboard opposite. A battery instrument should read correctly at a glance across a desk.",
+    "keyCharacteristics": [
+      "Two type voices, never mixed: SF Pro speaks words, SF Mono speaks numbers.",
+      "One accent, spent in exactly four places: status item, live temperature, thermal scale, health band word.",
+      "The material is the menu's own: no background, no border, no card, no shadow is drawn.",
+      "Fixed geometry: 288pt register, one 104pt label column, readings sharing one right edge."
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "The tier palette is the only color in the product, and it is used in exactly four places. A fifth use is a defect.",
+        "section": "colors"
+      },
+      {
+        "name": "The Never-Color-Only Rule",
+        "body": "Color is never the sole carrier of a state. Every tier is also written as a word; the scale's thresholds are labelled. The color is the alarm; the text is the message.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "SF Pro speaks words; SF Mono speaks numbers. A number set in the system face, or a word in the mono face, is a regression.",
+        "section": "typography"
+      },
+      {
+        "name": "The No-Chrome Rule",
+        "body": "If a mark is not a reading, a name, a rule, or a needle, it is not drawn.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do set every number in SF Mono at 11pt medium and every word in SF Pro at 11pt regular.",
+      "Do right-align all readings to the 12pt right inset so they share one edge.",
+      "Do reference colors by their semantic NSColor name so both appearances and Increased Contrast work without a hand-tuned hex.",
+      "Do render a missing register as N/A in the measurement face, and omit a row (such as Time left on AC) rather than showing it as n/a.",
+      "Do write the tier as a word in the status item's accessibility value, so state never rides on color alone.",
+      "Do keep the register 288pt wide with a fixed 104pt label column."
+    ],
+    "donts": [
+      "Don't draw a background, border, card, shadow or tint behind a row. The menu's material is the surface.",
+      "Don't use the tier palette anywhere beyond the four named placements.",
+      "Don't set a word in the monospace face or a number in the system face.",
+      "Don't use a gradient, icon tile, progress ring or sparkline in place of the reading.",
+      "Don't invent a value. A missing key renders N/A; an unknown charging state renders Unknown.",
+      "Don't reorder the register: health, temperature with its scale, cycles, capacity, charge, power, lifetime.",
+      "Don't reflow the dropdown to fit a long reading \u2014 truncate it instead."
+    ]
+  }
+}
