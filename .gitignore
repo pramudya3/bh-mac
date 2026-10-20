@@ -2,3 +2,4 @@
 *.xcodeproj
 DerivedData/
 BHMac.app/
+.DS_Store

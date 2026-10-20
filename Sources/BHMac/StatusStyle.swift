@@ -5,6 +5,7 @@ import AppKit
 /// Pure mappings — semantic system colors only, so they follow Dark Mode and
 /// increased contrast without a hand-tuned hex anywhere — so they can be
 /// tested without rendering anything.
+@MainActor
 enum StatusStyle {
     /// The status item's single color, for every tier including muted. The
     /// menu bar is glanced at dozens of times a day — the traffic light lives
@@ -38,10 +39,22 @@ enum StatusStyle {
         }
     }
 
+    private struct CacheKey: Hashable {
+        let name: String
+        let pointSize: CGFloat
+    }
+
+    private static var symbolCache: [CacheKey: NSImage] = [:]
+
     /// The status item's glyph, baked in the neutral status color so the
-    /// symbol and the reading read as one object. Non-template: the color
+    /// symbol and the reading read as one object. Cached to avoid
+    /// rasterizing a new bitmap on every poll. Non-template: the color
     /// has to survive.
     static func statusSymbol(named name: String, pointSize: CGFloat) -> NSImage? {
+        let key = CacheKey(name: name, pointSize: pointSize)
+        if let cached = symbolCache[key] {
+            return cached
+        }
         guard let symbol = NSImage(systemSymbolName: name, accessibilityDescription: nil)?
             .withSymbolConfiguration(.init(pointSize: pointSize, weight: .medium))
         else { return nil }
@@ -53,6 +66,7 @@ enum StatusStyle {
             return true
         }
         tinted.isTemplate = false
+        symbolCache[key] = tinted
         return tinted
     }
 }

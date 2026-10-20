@@ -15,23 +15,34 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         controller.onMenuWillOpen = { [weak self] in
-            self?.refresh()
+            self?.refreshMenu()
         }
-        refresh()
-        timer = Timer.scheduledTimer(
+        refreshMenu()
+        let scheduledTimer = Timer.scheduledTimer(
             timeInterval: Thresholds.pollInterval,
             target: self,
             selector: #selector(timerFired),
             userInfo: nil,
             repeats: true
         )
+        // Allow macOS power management to coalesce wakeups to preserve CPU idle states.
+        scheduledTimer.tolerance = 2.0
+        timer = scheduledTimer
     }
 
     @objc private func timerFired() {
-        refresh()
+        refreshStatusItem()
     }
 
-    private func refresh() {
+    /// Background cadence: updates only the status bar button.
+    /// Does not rebuild dropdown menu views while the menu is closed.
+    private func refreshStatusItem() {
+        let snapshot = reader.readSnapshot()
+        controller.updateTitle(MenuContentFactory.makeTitle(from: snapshot))
+    }
+
+    /// On-demand: updates title and builds full dropdown menu rows when opening or refreshing.
+    private func refreshMenu() {
         let snapshot = reader.readSnapshot()
         controller.updateTitle(MenuContentFactory.makeTitle(from: snapshot))
         controller.present(MenuContentFactory.makeRows(from: snapshot))

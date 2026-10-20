@@ -14,6 +14,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         withLength: NSStatusItem.variableLength
     )
     private let menu = NSMenu()
+    private(set) var currentTitle: MenuContentFactory.StatusTitle?
 
     override init() {
         super.init()
@@ -26,7 +27,13 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     /// The status item: one neutral glyph plus the reading in tabular
     /// figures, so a digit change never reflows the menu bar. The tier color
     /// is not spent here — it lives in the dropdown (spec §6).
+    /// Skips updating if the title has not changed to avoid redundant WindowServer redraws.
     func updateTitle(_ title: MenuContentFactory.StatusTitle) {
+        if currentTitle == title {
+            return
+        }
+        currentTitle = title
+
         statusItem.button?.attributedTitle = NSAttributedString(
             string: title.text,
             attributes: [

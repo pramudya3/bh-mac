@@ -213,5 +213,13 @@ enum MenuContentFactoryTests {
             MiniTest.expect(MenuValue(measurement: "n/a").isUnavailable)
             MiniTest.expect(!MenuValue(measurement: "81%").isUnavailable)
         }
+
+        MiniTest.test("testStatusTitleEquality") {
+            let t1 = MenuContentFactory.StatusTitle(text: "34.5°C", tier: .normal, symbolName: "thermometer.medium")
+            let t2 = MenuContentFactory.StatusTitle(text: "34.5°C", tier: .normal, symbolName: "thermometer.medium")
+            let t3 = MenuContentFactory.StatusTitle(text: "35.0°C", tier: .normal, symbolName: "thermometer.medium")
+            MiniTest.expect(t1 == t2)
+            MiniTest.expect(t1 != t3)
+        }
     }
 }

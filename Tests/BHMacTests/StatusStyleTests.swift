@@ -34,6 +34,13 @@ enum StatusStyleTests {
             expectEqual(StatusStyle.statusSymbol(named: "", pointSize: 11), nil)
         }
 
+        MiniTest.test("testStatusSymbolReturnsCachedInstance") {
+            let img1 = StatusStyle.statusSymbol(named: MenuContentFactory.statusSymbolName, pointSize: 11)
+            let img2 = StatusStyle.statusSymbol(named: MenuContentFactory.statusSymbolName, pointSize: 11)
+            MiniTest.expect(img1 != nil)
+            MiniTest.expect(img1 === img2, "status symbol should be cached to avoid re-rasterization")
+        }
+
         MiniTest.test("testMeasurementVoiceIsFixedPitch") {
             // Every measured number in the app wears one monospaced face, so
             // columns align and no reading reflows as its digits change.

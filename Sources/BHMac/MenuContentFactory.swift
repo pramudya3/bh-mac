@@ -4,7 +4,7 @@ import Foundation
 /// and the dropdown's rows. Strings, numbers and view-free data only — no
 /// AppKit types — so every display decision is unit-tested (spec §6).
 enum MenuContentFactory {
-    struct StatusTitle {
+    struct StatusTitle: Equatable {
         let text: String
         let tier: TempTier
         /// SF Symbol shown beside the title while a temperature reading
