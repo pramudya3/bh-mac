@@ -4,6 +4,7 @@ A menu-bar-only macOS app that shows **battery temperature** at a glance, with b
 
 - **Menu bar:** live battery temperature, color-coded (green ≤ 35 °C, orange ≤ 42 °C, red above)
 - **Dropdown:** health %, cycles vs. design life, capacities, charge/power, and lifetime stats recorded by the battery's own gas gauge
+- **Ultra-low CPU & energy usage:** lazy dropdown rendering (zero AppKit view allocations while closed), dirty-checked status item updates, cached SF Symbols, and timer coalescing
 
 ## What the interface looks like
 
